@@ -1,9 +1,9 @@
 package org.info_0.ecobundle;
 
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.info_0.ecobundle.Util.Util;
 import org.info_0.ecobundle.commands.Deposit;
 import org.info_0.ecobundle.commands.Withdraw;
 
@@ -24,6 +24,8 @@ public final class EcoBundle extends JavaPlugin {
 		instance = this;
 		getCommand("deposit").setExecutor(new Deposit());
 		getCommand("withdraw").setExecutor(new Withdraw());
+		saveDefaultConfig();
+		Util.loadMessages();
     }
 
     @Override

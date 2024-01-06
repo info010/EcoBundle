@@ -13,9 +13,8 @@ public class MaterialCalculator {
 		int x = 0;
         for(int i = 0;i<=35;i++){
 			ItemStack item = player.getInventory().getItem(i);
-			assert item != null;
-			if(!(item.getType().isAir())) continue;
-			x++;
+            if (item != null && !(item.getType().isAir())) continue;
+            x++;
         }
 		return x;
 	}
@@ -23,8 +22,7 @@ public class MaterialCalculator {
 		int x = 0;
 		for(int i = 0;i<=35;i++){
 			ItemStack item = player.getInventory().getItem(i);
-            assert item != null;
-            if(item.getType() != Material.GOLD_INGOT) continue;
+            if(item == null || item.getType() != Material.GOLD_INGOT) continue;
 			x += item.getAmount();
 		}
 		return x;
@@ -33,7 +31,6 @@ public class MaterialCalculator {
 		int x = 0;
 		for(int i = 0;i<=35;i++){
 			ItemStack item = player.getInventory().getItem(i);
-			assert item != null;
 			if(item.getType() != Material.GOLD_INGOT) continue;
 			x++;
 		}
