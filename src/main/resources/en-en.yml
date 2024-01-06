@@ -1,0 +1,20 @@
+BundleMessages:
+    Deposit-Message: "&aYou have deposited %s gold ingot(s) into the bundle."
+    Withdraw-Message: "&aYou have withdrawn %s gold ingot(s) to your inventory."
+    Deposit-All-Message: "&aYou have deposited all gold ingots from your inventory."
+    Withdraw-All-Message: "&aYou have withdraw all gold ingots to your inventory."
+ErrorMessages:
+    No-Permission: "&cYou do not have permission."
+    Not-Player: "&cThis command only for players."
+    No-Gold: "&cYou do not have any gold ingot."
+    No-Money: "&cYou do not have any money for buy a gold ingot."
+    Not-Enough-Balance: "&cYour balance not enough for buy these gold ingot(s)."
+    Not-Enough-Gold: "&cYour inventory does not have enough gold ingot."
+    Not-Zero: "&cYou must enter an amount greater than 0."
+    Full-Inventory: "&cYour inventory is full."
+    Not-Enough-Space: "&cYour inventory does not have enough space" 
+Commands-Usage:
+    EcoBundle-Help-Usage: "&6The command usage is /eco-bundle help"
+    Deposit-Usage: "&6The command usage is /deposit <gold-ingot-amount | all>"
+    Withdraw-Usage: "&6The command usage is /withdraw <gold-ingot-amount | all>"
+    
