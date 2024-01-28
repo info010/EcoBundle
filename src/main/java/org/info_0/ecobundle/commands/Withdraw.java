@@ -54,19 +54,6 @@ public class Withdraw implements CommandExecutor {
 			return false;
 		}
 
-		int playerGoldAmount = MaterialCalculator.goldAmount(player);
-
-		if (playerGoldAmount == 0) {
-			player.sendMessage(Util.getMessage("No-Gold"));
-			return false;
-		}
-
-		if (amount > playerGoldAmount) {
-			player.sendMessage(Util.getMessage("Not-Enough-Gold"));
-			amount = playerGoldAmount;
-			isAll = true;
-		}
-
 		int money = amount * 5;
 		if(economy.getBalance(player)<money){
             if (economy.getBalance(player) < 5) {

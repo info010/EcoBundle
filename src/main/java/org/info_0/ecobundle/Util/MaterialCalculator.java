@@ -31,7 +31,7 @@ public class MaterialCalculator {
 		int x = 0;
 		for(int i = 0;i<=35;i++){
 			ItemStack item = player.getInventory().getItem(i);
-			if(item.getType() != Material.GOLD_INGOT) continue;
+			if(item == null || item.getType() != Material.GOLD_INGOT) continue;
 			x++;
 		}
 		return x;

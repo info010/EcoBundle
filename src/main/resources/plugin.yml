@@ -1,7 +1,7 @@
 name: EcoBundle
 version: '${project.version}'
 main: org.info_0.ecobundle.EcoBundle
-api-version: '1.20'
+api-version: '1.19'
 author: 'info_0'
 commands: 
     deposit:
