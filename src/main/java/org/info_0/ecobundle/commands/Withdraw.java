@@ -8,8 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.info_0.ecobundle.EcoBundle;
-import org.info_0.ecobundle.Util.MaterialCalculator;
-import org.info_0.ecobundle.Util.Util;
+import org.info_0.ecobundle.util.Util;
 
 public class Withdraw implements CommandExecutor {
 	private final Economy economy = EcoBundle.getEconomy();
@@ -38,8 +37,20 @@ public class Withdraw implements CommandExecutor {
 
 		try {
 			if (strings[0].equalsIgnoreCase("all")) {
-				amount = MaterialCalculator.emptySpace(player);
-				isAll = true;
+                double playerBalance = economy.getBalance(player);
+                if (playerBalance < EcoBundle.getInstance().getConfig().getInt("gold_amount")) {
+                    player.sendMessage(Util.getMessage("No-Money"));
+                    return false;
+                }
+
+                int maxGoldAmount = (int) (playerBalance / EcoBundle.getInstance().getConfig().getInt("gold_amount"));
+                if (maxGoldAmount == 0) {
+                    player.sendMessage(Util.getMessage("No-Gold"));
+                    return false;
+                }
+
+                amount = maxGoldAmount;
+                isAll = true;
 			} else {
 				amount = Integer.parseInt(strings[0]);
 				isAll = false;
@@ -54,17 +65,18 @@ public class Withdraw implements CommandExecutor {
 			return false;
 		}
 
-		int money = amount * 5;
-		if(economy.getBalance(player)<money){
-            if (economy.getBalance(player) < 5) {
-                player.sendMessage(Util.getMessage("No-Money"));
+		int money = amount * EcoBundle.getInstance().getConfig().getInt("gold_amount");;
+		if (economy.getBalance(player) < money){
+			if (economy.getBalance(player) < 5) {
+				player.sendMessage(Util.getMessage("No-Money"));
 				return false;
-            } else {
-                player.sendMessage(String.format(Util.getMessage("Not-Enough-Balance")));
-            }
-            money = (int) (economy.getBalance(player)-economy.getBalance(player)%5);
-			amount = money/5;
+			} else {
+				player.sendMessage(Util.getMessage("Not-Enough-Balance"));
+				money = (int) (economy.getBalance(player) - economy.getBalance(player) % EcoBundle.getInstance().getConfig().getInt("gold_amount"));
+				amount = money / EcoBundle.getInstance().getConfig().getInt("gold_amount");;
+			}
 		}
+		
 		economy.withdrawPlayer(player, money);
 		player.getInventory().addItem(new ItemStack(Material.GOLD_INGOT,amount));
 		player.sendMessage((isAll) ? Util.getMessage("Withdraw-All-Message") :

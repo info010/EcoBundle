@@ -1,50 +1,76 @@
 package org.info_0.ecobundle;
 
-import net.milkbowl.vault.economy.Economy;
-import org.bukkit.plugin.RegisteredServiceProvider;
+import java.sql.SQLException;
+
+import org.bukkit.plugin.ServicePriority;
+import org.bukkit.plugin.ServicesManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.info_0.ecobundle.Util.Util;
-import org.info_0.ecobundle.commands.Deposit;
-import org.info_0.ecobundle.commands.Withdraw;
+import org.info_0.ecobundle.commands.*;
+import org.info_0.ecobundle.util.Database;
+import org.info_0.ecobundle.util.Util;
+import org.info_0.ecobundle.vault.VaultEconomy;
+
+import net.milkbowl.vault.economy.Economy;
 
 public final class EcoBundle extends JavaPlugin {
-	private static Economy econ = null;
+	
+    private static VaultEconomy economy = null;
 	private static EcoBundle instance;
-	public static EcoBundle getInstance(){
-		return instance;
-	}
+	private static Database db;
 
     @Override
     public void onEnable() {
-		if (!setupEconomy()) {
-			getLogger().severe(String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName()));
-			getServer().getPluginManager().disablePlugin(this);
-			return;
-		}
 		instance = this;
-		getCommand("deposit").setExecutor(new Deposit());
+		db = new Database();
+        try {
+            db.connect();
+            db.setup();
+        } catch (SQLException exception) {
+            db.report(exception);
+        }
+        registerEconomy();
+        getCommand("deposit").setExecutor(new Deposit());
 		getCommand("withdraw").setExecutor(new Withdraw());
+        getCommand("balance").setExecutor(new Balance());
+	    getCommand("baltop").setExecutor(new Baltop());
+        getCommand("pay").setExecutor(new Pay());
+        getCommand("ecobundle").setExecutor(new org.info_0.ecobundle.commands.EcoBundle());
 		saveDefaultConfig();
 		Util.loadMessages();
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        try {
+            db.getConnection().close();
+        } catch (SQLException exception) {
+            db.report(exception);
+        }
+        economy = null;
     }
-	private boolean setupEconomy() {
-		if (getServer().getPluginManager().getPlugin("Vault") == null) {
-			return false;
-		}
-		RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-		if (rsp == null) {
-			return false;
-		}
-		econ = rsp.getProvider();
-		return true;
+
+    private boolean registerEconomy() {
+        if (this.getServer().getPluginManager().getPlugin("Vault") != null) {
+            economy = new VaultEconomy();
+            ServicesManager sm = this.getServer().getServicesManager();
+            sm.register(Economy.class, economy, this, ServicePriority.Highest);
+            return true;
+        } else {
+            getServer().getPluginManager().disablePlugin(this);
+            instance.getLogger().warning("Vault Economy not found disabling plugin!");
+            return false;
+        }
+    }
+
+	public static VaultEconomy getEconomy() { 
+		return economy;
 	}
 
-	public static Economy getEconomy() {
-		return econ;
+	public static EcoBundle getInstance(){
+		return instance;
+	}
+
+	public static Database getDatabase() { 
+		return db;
 	}
 }
