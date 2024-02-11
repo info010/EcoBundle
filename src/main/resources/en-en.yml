@@ -20,7 +20,6 @@ ErrorMessages:
     Not-Enough-Space: "&cYour inventory does not have enough space" 
     Invalid-Quantity: "&cYou have entered an invalid amount"
     Player-Not-Online: "&cThe player is not online"
-    Not-Enough-Balance: "&cYour balance is not enough."
 Commands-Usage:
     EcoBundle-Help-Usage: "&6The command usage is /eco-bundle help"
     Deposit-Usage: "&6The command usage is /deposit <gold-ingot-amount | all>"
